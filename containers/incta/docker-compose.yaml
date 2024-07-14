@@ -1,0 +1,29 @@
+services:
+  incta:
+    container_name: incta_container
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: incta_image
+    networks:
+      - incta_network
+    volumes:
+      - incta_data:/incta-data
+      - ../../deploiment.conf:/incta-data/deploiment.conf
+      - ~/.ssh:/root/.ssh
+      - /var/run/docker.sock:/var/run/docker.sock
+    working_dir: /incta-data
+    tty: true
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 1s
+        max_attempts: 20
+        window: 120s
+
+volumes:
+  incta_data:
+
+networks:
+  incta_network:
+    name: incta_network
